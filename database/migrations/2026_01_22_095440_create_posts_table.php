@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->comment('Заголовок')->default('Без названия');
             $table->text('short_description')->comment('Краткое описание')->nullable();
-            $table->text('description')->comment('Собственно пост')->nullable();
+            $table->text('body')->comment('Собственно пост')->nullable();
             $table->boolean('is_published')->default(false)->comment('Опубликован ли пост');
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();

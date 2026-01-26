@@ -24,7 +24,7 @@ class StorePostRequest extends FormRequest
         return [
             'title' => ['nullable', 'string'],
             'short_description' => ['nullable', 'string'],
-            'description' => ['required', 'string'],
+            'body' => ['required', 'string'],
             'is_published' => ['nullable', 'boolean'],
         ];
     }
