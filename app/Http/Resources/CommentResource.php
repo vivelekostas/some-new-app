@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\Post
+ * @mixin \App\Models\Comment
  */
-class PostResource extends JsonResource
+class CommentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,23 +19,13 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'short_description' => $this->short_description,
             'body' => $this->body,
-            'is_published' => $this->is_published,
             'user_name' => $this->whenLoaded(
                 'user',
                 fn() => $this->user->name
             ),
-            'category_title' => $this->whenLoaded(
-                'category',
-                fn() => $this->category?->title,
-            ),
-            'comments' => new CommentCollection(
-                $this->whenLoaded(
-                    'comments'
-                )
-            ),
+            'user_id' => $this->user_id,
+            'post_id' => $this->post_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

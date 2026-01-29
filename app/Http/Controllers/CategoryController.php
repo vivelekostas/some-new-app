@@ -4,24 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+    public function __construct(protected CategoryService $service)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return new CategoryCollection($this->service->paginate());
     }
 
     /**
@@ -29,7 +28,11 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $category = $this->service->create(
+            $request->validated()
+        );
+
+        return new CategoryResource($category);
     }
 
     /**
@@ -37,15 +40,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
+        return new CategoryResource($category);
     }
 
     /**
@@ -53,7 +48,12 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $updatedCategory = $this->service->update(
+            $category,
+            $request->validated()
+        );
+
+        return new CategoryResource($updatedCategory);
     }
 
     /**
@@ -61,6 +61,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $this->service->delete($category);
+
+        return response()->noContent();
     }
 }

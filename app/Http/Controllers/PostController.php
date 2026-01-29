@@ -7,15 +7,20 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Services\PostService;
 
 class PostController extends Controller
 {
+    public function __construct(protected PostService $service)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return new PostCollection(Post::query()->latest()->paginate());
+        return new PostCollection($this->service->paginate());
     }
 
     /**
@@ -23,7 +28,10 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $post = $request->user()->posts()->create($request->validated());
+        $post = $this->service->create(
+            $request->user(),
+            $request->validated()
+        );
 
         return new PostResource($post);
     }
@@ -33,6 +41,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->load(['user', 'category', 'comments.user']);
+
         return new PostResource($post);
     }
 
@@ -41,7 +51,10 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        $post->update($request->validated());
+        $post = $this->service->update(
+            $post,
+            $request->validated()
+        );
 
         return new PostResource($post);
     }
@@ -51,7 +64,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        $this->service->delete($post);
 
         return response()->noContent();
     }
