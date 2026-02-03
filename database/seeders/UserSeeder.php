@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
         User::factory()->hasPosts(2, [
             'is_published' => true
         ])->create([
-            'name' => 'user',
-            'email' => 'user@user.com',
+            'name' => 'editor',
+            'email' => 'editor@editor.com',
             'email_verified_at' => now(),
             'password' => Hash::make('qwerty'),
         ]);
@@ -33,8 +33,8 @@ class UserSeeder extends Seeder
         User::factory()->hasPosts(2, [
             'is_published' => true
         ])->create([
-            'name' => 'userok',
-            'email' => 'userok@user.com',
+            'name' => 'user',
+            'email' => 'user@user.com',
             'email_verified_at' => now(),
             'password' => Hash::make('qwerty'),
         ]);

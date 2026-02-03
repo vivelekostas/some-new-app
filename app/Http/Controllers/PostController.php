@@ -8,9 +8,12 @@ use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Services\PostService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PostController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(protected PostService $service)
     {
     }
@@ -18,7 +21,7 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): PostCollection
     {
         return new PostCollection($this->service->paginate());
     }
@@ -26,7 +29,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(StorePostRequest $request): PostResource
     {
         $post = $this->service->create(
             $request->user(),
@@ -39,7 +42,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post): PostResource
     {
         $post->load(['user', 'category', 'comments.user']);
 
@@ -49,8 +52,10 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post): PostResource
     {
+        $this->authorize('update', $post);
+
         $post = $this->service->update(
             $post,
             $request->validated()

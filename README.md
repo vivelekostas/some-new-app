@@ -7,6 +7,7 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 - [Laravel Sanctum](https://laravel.su/docs/12.x/sanctum). `php artisan install:api`
 - [Laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper). `composer require --dev barryvdh/laravel-ide-helper`
+- [Laravel Permission](https://spatie.be/docs/laravel-permission/v6/introduction). `composer require spatie/laravel-permission`
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
