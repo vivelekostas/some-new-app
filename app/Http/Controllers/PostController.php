@@ -31,6 +31,8 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request): PostResource
     {
+        $this->authorize('create', Post::class);
+
         $post = $this->service->create(
             $request->user(),
             $request->validated()
@@ -44,6 +46,8 @@ class PostController extends Controller
      */
     public function show(Post $post): PostResource
     {
+        $this->authorize('view', $post);
+
         $post->load(['user', 'category', 'comments.user']);
 
         return new PostResource($post);
@@ -69,6 +73,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
+
         $this->service->delete($post);
 
         return response()->noContent();

@@ -17,6 +17,7 @@ class RoleSeeder extends Seeder
     {
         Role::create(['name' => 'admin', 'guard_name' => $this->guard]);
         Role::create(['name' => 'editor', 'guard_name' => $this->guard]);
-        Role::create(['name' => 'user', 'guard_name' => $this->guard]);
+        Role::create(['name' => 'writer', 'guard_name' => $this->guard]);
+        Role::create(['name' => 'reader', 'guard_name' => $this->guard]);
     }
 }

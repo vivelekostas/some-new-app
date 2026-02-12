@@ -29,10 +29,29 @@ class DatabaseSeeder extends Seeder
 
         $adminRole = Role::findByName('admin', 'sanctum');
         $editorRole = Role::findByName('editor', 'sanctum');
+        $writerRole = Role::findByName('writer', 'sanctum');
+        $readerRole = Role::findByName('reader', 'sanctum');
 
         // Привязываем permissions к ролям.
-        $adminRole->givePermissionTo(['edit posts', 'delete posts']);
-        $editorRole->givePermissionTo(['edit posts']);
+        $adminRole->givePermissionTo([
+            'create posts',
+            'edit posts',
+            'view posts',
+            'delete posts',
+        ]);
+        $editorRole->givePermissionTo([
+            'view posts',
+            'edit posts',
+        ]);
+        $writerRole->givePermissionTo([
+            'create posts',
+            'edit posts',
+            'view posts',
+            'delete posts',
+        ]);
+        $readerRole->givePermissionTo([
+            'view posts',
+        ]);
 
         // Создаём админа, редактора, юзера.
         $this->call(UserSeeder::class);
@@ -44,14 +63,17 @@ class DatabaseSeeder extends Seeder
         $editor = User::query()->find(2);
         $editor->assignRole('editor');
 
-        $user = User::query()->find(3);
-        $user->assignRole('user');
+        $writer = User::query()->find(3);
+        $writer->assignRole('writer');
+
+        $reader = User::query()->find(4);
+        $reader->assignRole('reader');
 
         // Создаём категории
         $categories = Category::factory()->count(5)->create();
 
         // Создаём пользователей
-        $users = User::factory()->count(10)->create();
+        $users = User::factory()->count(10)->writer()->create();
 
         // Каждый пользователь создаёт 10 своих постов
         foreach ($users as $user) {

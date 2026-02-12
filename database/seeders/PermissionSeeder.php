@@ -15,7 +15,9 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        Permission::create(['name' => 'create posts', 'guard_name' => $this->guard]);
         Permission::create(['name' => 'edit posts', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'view posts', 'guard_name' => $this->guard]);
         Permission::create(['name' => 'delete posts', 'guard_name' => $this->guard]);
     }
 }
