@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,8 @@ Route::get('/user', function (Request $request) {
 Route::get('/health', function () {
     return response()->json(['status' => 'ok everything is working']);
 });
+
+Route::any('/test', TestController::class);
 
 // REGISTRATION PASSWORD
 Route::post('/register', [AuthController::class, 'register']);
