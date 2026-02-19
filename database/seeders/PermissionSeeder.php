@@ -18,8 +18,17 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         Permission::create(['name' => 'create posts', 'guard_name' => $this->guard]);
-        Permission::create(['name' => 'edit posts', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'edit own posts', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'edit any posts', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'delete own posts', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'delete any posts', 'guard_name' => $this->guard]);
         Permission::create(['name' => 'view posts', 'guard_name' => $this->guard]);
-        Permission::create(['name' => 'delete posts', 'guard_name' => $this->guard]);
+
+        Permission::create(['name' => 'create comments', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'edit own comments', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'edit any comments', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'delete own comments', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'delete any comments', 'guard_name' => $this->guard]);
+        Permission::create(['name' => 'view comments', 'guard_name' => $this->guard]);
     }
 }

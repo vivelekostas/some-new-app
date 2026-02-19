@@ -11,67 +11,53 @@ use Illuminate\Auth\Access\Response;
 class PostPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Просмотр списка постов
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can('view posts');
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Просмотр конкретного поста
      */
     public function view(User $user, Post $post): bool
     {
-        if ($user->can('view posts')) {
-            return true;
-        }
-
-        return false;
+        return $user->can('view posts');
     }
 
     /**
-     * Determine whether the user can create models.
+     * Создание поста
      */
     public function create(User $user): bool
     {
-        if ($user->can('create posts')) {
-            return true;
-        }
-
-        return false;
+        return $user->can('create posts');
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Обновление поста
      */
     public function update(User $user, Post $post): bool
     {
-        if (
-            $user->can('edit posts')
-            &&
-            $user->id === $post->user_id
-        ) {
+        if ($user->can('edit any posts')) {
             return true;
         }
 
-        return false;
+        return $user->can('edit own posts')
+            && $user->id === $post->user_id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Удаление поста
      */
     public function delete(User $user, Post $post): bool
     {
-        if (
-            $user->can('delete posts')
-            &&
-            $user->id === $post->user_id
-        ) {
+        if ($user->can('delete any posts')) {
             return true;
         }
 
-        return false;
+        return $user->can('delete own posts')
+            && $user->id === $post->user_id;
     }
 
     /**

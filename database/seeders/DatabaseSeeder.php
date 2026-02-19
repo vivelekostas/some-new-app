@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -35,24 +36,34 @@ class DatabaseSeeder extends Seeder
         $readerRole = Role::findByName('reader', 'sanctum');
 
         // Привязываем permissions к ролям.
-        $adminRole->givePermissionTo([
-            'create posts',
-            'edit posts',
-            'view posts',
-            'delete posts',
-        ]);
+        $adminRole->givePermissionTo(Permission::all());
+
         $editorRole->givePermissionTo([
             'view posts',
-            'edit posts',
+            'edit any posts',
+            'view comments',
+            'edit any comments',
         ]);
+
         $writerRole->givePermissionTo([
             'create posts',
-            'edit posts',
+            'edit own posts',
+            'delete own posts',
             'view posts',
-            'delete posts',
+
+            'create comments',
+            'edit own comments',
+            'delete own comments',
+            'view comments',
         ]);
+
         $readerRole->givePermissionTo([
             'view posts',
+
+            'create comments',
+            'edit own comments',
+            'delete own comments',
+            'view comments',
         ]);
 
         // Создаём админа, редактора, юзера.

@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Админ автоматически проходит ЛЮБУЮ проверку - разрешаем ему всё.
         Gate::before(function ($user, $ability) {
             return $user->hasRole('admin') ? true : null;
         });

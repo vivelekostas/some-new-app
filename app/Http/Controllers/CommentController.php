@@ -11,9 +11,12 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Services\CommentService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(protected CommentService $service)
     {
     }
@@ -23,15 +26,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return new CommentCollection($this->service->paginate());
-    }
+        $this->authorize('view');
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return new CommentCollection($this->service->paginate());
     }
 
     /**
@@ -39,6 +36,8 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Post $post)
     {
+        $this->authorize('create', Comment::class);
+
         $comment = $this->service->create(
             $post,
             $request->validated(),
@@ -53,16 +52,9 @@ class CommentController extends Controller
      */
     public function show(Post $post, Comment $comment)
     {
-//        dd($comment);
-        return new CommentResource($comment);
-    }
+        $this->authorize('view', $comment);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
+        return new CommentResource($comment);
     }
 
     /**
@@ -70,7 +62,9 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Post $post, Comment $comment)
     {
-        $this->service->update(
+        $this->authorize('update', $comment);
+
+        $comment = $this->service->update(
             $comment,
             $request->validated()
         );
@@ -83,6 +77,8 @@ class CommentController extends Controller
      */
     public function destroy(Post $post, Comment $comment)
     {
+        $this->authorize('delete', $comment);
+
         $this->service->delete($comment);
 
         return response()->noContent();
