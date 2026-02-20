@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
@@ -35,4 +36,10 @@ Route::middleware(['middleware' => 'auth:sanctum'])->group(function () {
     Route::resource('posts', PostController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('posts.comments', CommentController::class);
+
+    Route::post('/posts/{post}/likes', [LikeController::class, 'likePost']);
+    Route::delete('/posts/{post}/likes', [LikeController::class, 'unlikePost']);
+
+    Route::post('/comments/{comment}/likes', [LikeController::class, 'likeComment']);
+    Route::delete('/comments/{comment}/likes', [LikeController::class, 'unlikeComment']);
 });

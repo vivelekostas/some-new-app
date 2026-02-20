@@ -25,7 +25,7 @@ class PostController extends Controller
      */
     public function index(): PostCollection
     {
-        $this->authorize('view');
+        $this->authorize('viewAny', Post::class);
 
         return new PostCollection($this->service->paginate());
     }

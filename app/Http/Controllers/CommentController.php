@@ -26,7 +26,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $this->authorize('view');
+        $this->authorize('viewAny', Comment::class);
 
         return new CommentCollection($this->service->paginate());
     }
