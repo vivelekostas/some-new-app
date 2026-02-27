@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Post;
@@ -8,11 +10,48 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostService
 {
-    public function paginate(int $perPage = 10): LengthAwarePaginator
+    public function getPublicPosts(): LengthAwarePaginator
+    {
+        return Post::query()
+            ->whereIsPublished(true)
+            ->latest()
+            ->paginate();
+    }
+
+    public function getForDashboard(User $user): LengthAwarePaginator
+    {
+        return match (true) {
+            $user->hasRole('admin'),
+            $user->hasRole('editor') =>
+            Post::query()->whereIsPublished(true)
+                ->latest()
+                ->paginate(),
+
+            $user->hasRole('writer') =>
+            Post::query()->whereUserId($user->id)
+                ->latest()
+                ->paginate(),
+
+            $user->hasRole('reader') =>
+            $user->likedPosts()
+//                ->whereIsPublished('true')
+                ->latest()
+                ->paginate(),
+
+            default => Post::query()->whereRaw('1 = 0')->paginate(),
+        };
+    }
+
+    public function getLiked(User $user): LengthAwarePaginator
+    {
+        return $user->likedPosts()->latest()->paginate();
+    }
+
+    public function paginate(): LengthAwarePaginator
     {
         return Post::query()
             ->latest()
-            ->paginate($perPage);
+            ->paginate();
     }
 
     public function create(User $user, array $data): Post

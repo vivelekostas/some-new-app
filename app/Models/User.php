@@ -7,11 +7,11 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-
 
 /**
  * @property int $id
@@ -24,6 +24,12 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
  * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $likedComments
+ * @property-read int|null $liked_comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $likedPosts
+ * @property-read int|null $liked_posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Like> $likes
+ * @property-read int|null $likes_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -111,5 +117,25 @@ class User extends Authenticatable
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    /**
+     * Получить посты, которые лайкнул пользователь.
+     *
+     * @return MorphToMany
+     */
+    public function likedPosts(): MorphToMany
+    {
+        return $this->morphedByMany(Post::class, 'likeable', 'likes');
+    }
+
+    /**
+     * Получить комментарии, которые лайкнул пользователь.
+     *
+     * @return MorphToMany
+     */
+    public function likedComments(): MorphToMany
+    {
+        return $this->morphedByMany(Comment::class, 'likeable', 'likes');
     }
 }
