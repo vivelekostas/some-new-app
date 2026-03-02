@@ -28,6 +28,8 @@ class UpdatePostRequest extends FormRequest
             'short_description' => ['nullable', 'string'],
             'body' => ['required', 'string'],
             'is_published' => ['nullable', 'boolean'],
+            'tags' => ['sometimes', 'array'],
+            'tags.*' => ['exists:tags,id'],
         ];
     }
 }

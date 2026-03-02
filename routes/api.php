@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Content\CategoryController;
 use App\Http\Controllers\Api\V1\Content\CommentController;
 use App\Http\Controllers\Api\V1\Content\LikeController;
 use App\Http\Controllers\Api\V1\Content\PostController;
+use App\Http\Controllers\Api\V1\Content\TagController;
 use App\Http\Controllers\Api\V1\Dashboard\DashboardController;
 use App\Http\Controllers\Api\V1\Public\HomeController;
 use App\Http\Controllers\Api\V1\TestController;
@@ -50,6 +51,7 @@ Route::prefix('v1')->group(function () {
         Route::resource('posts', PostController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('posts.comments', CommentController::class);
+        Route::apiResource('tags', TagController::class);
 
         Route::post('/posts/{post}/likes', [LikeController::class, 'likePost']);
         Route::delete('/posts/{post}/likes', [LikeController::class, 'unlikePost']);

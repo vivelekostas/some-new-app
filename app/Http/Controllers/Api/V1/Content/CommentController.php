@@ -24,8 +24,10 @@ class CommentController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
+     * @return CommentCollection
      */
-    public function index()
+    public function index(): CommentCollection
     {
         $this->authorize('viewAny', Comment::class);
 
@@ -34,8 +36,12 @@ class CommentController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param StoreCommentRequest $request
+     * @param Post $post
+     * @return CommentResource
      */
-    public function store(StoreCommentRequest $request, Post $post)
+    public function store(StoreCommentRequest $request, Post $post): CommentResource
     {
         $this->authorize('create', Comment::class);
 
@@ -50,8 +56,12 @@ class CommentController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param Post $post
+     * @param Comment $comment
+     * @return CommentResource
      */
-    public function show(Post $post, Comment $comment)
+    public function show(Post $post, Comment $comment): CommentResource
     {
         $this->authorize('view', $comment);
 
@@ -60,15 +70,17 @@ class CommentController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param UpdateCommentRequest $request
+     * @param Post $post
+     * @param Comment $comment
+     * @return CommentResource
      */
-    public function update(UpdateCommentRequest $request, Post $post, Comment $comment)
+    public function update(UpdateCommentRequest $request, Post $post, Comment $comment): CommentResource
     {
         $this->authorize('update', $comment);
 
-        $comment = $this->service->update(
-            $comment,
-            $request->validated()
-        );
+        $comment = $this->service->update($comment, $request->validated());
 
         return new CommentResource($comment);
     }

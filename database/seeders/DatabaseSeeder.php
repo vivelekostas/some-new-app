@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -84,6 +85,8 @@ class DatabaseSeeder extends Seeder
 
         // Создаём категории
         $categories = Category::factory()->count(5)->create();
+        // Создаём теги
+        $tags = Tag::factory()->count(10)->create();
 
         // Создаём пользователей
         $users = User::factory()->count(10)->writer()->create();
@@ -94,7 +97,14 @@ class DatabaseSeeder extends Seeder
                 ->count(10)
                 ->for($user)
                 ->for($categories->random())
-                ->create();
+                ->create()
+                ->each(function ($post) use ($tags) {
+
+                    // 1–3 случайных тега на пост
+                    $randomTags = $tags->random(rand(1, 3))->pluck('id');
+
+                    $post->tags()->attach($randomTags);
+                });
         }
 
         $allPosts = Post::all();
