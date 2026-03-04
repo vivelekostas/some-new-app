@@ -59,7 +59,7 @@ class PostController extends Controller
     {
         $this->authorize('view', $post);
 
-        $post->load(['user', 'category', 'comments.user', 'tags']);
+        $post->load(['author', 'category', 'comments.author', 'tags']);
 
         return new PostResource($post);
     }

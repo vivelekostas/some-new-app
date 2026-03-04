@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Content\TagController;
 use App\Http\Controllers\Api\V1\Dashboard\DashboardController;
 use App\Http\Controllers\Api\V1\Public\HomeController;
 use App\Http\Controllers\Api\V1\TestController;
+use App\Http\Controllers\Api\V1\User\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,6 +59,10 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/comments/{comment}/likes', [LikeController::class, 'likeComment']);
         Route::delete('/comments/{comment}/likes', [LikeController::class, 'unlikeComment']);
+
+        // Юзер.
+        Route::post('/authors/{author}/subscribe', [SubscriptionController::class, 'store']);
+        Route::delete('/authors/{author}/subscribe', [SubscriptionController::class, 'destroy']);
 
         // Dashboard - админка, ЛК.
         Route::get('/dashboard', DashboardController::class);

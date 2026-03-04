@@ -10,6 +10,8 @@
 
 Полезные команды:
 - `sail php artisan ide-helper:models "App\Models\Post" -W`
+- `sail php artisan optimize:clear`
+- `docker exec -it some-new-app-redis-1 redis-cli` или `sail exec redis redis-cli`
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 

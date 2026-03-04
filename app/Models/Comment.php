@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Like> $likes
  * @property-read int|null $likes_count
  * @property-read \App\Models\Post $post
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User $author
  * @method static \Database\Factories\CommentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
@@ -47,9 +47,9 @@ class Comment extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function user(): BelongsTo
+    public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function likes(): MorphMany

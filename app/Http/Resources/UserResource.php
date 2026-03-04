@@ -25,6 +25,9 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
             'role' => $this->roles,
+            'is_subscribed' => auth()->check()
+                ? auth()->user()->isSubscribedTo($this->resource)
+                : false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

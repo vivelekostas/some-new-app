@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read int|null $likes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User $author
  * @method static \Database\Factories\PostFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post newQuery()
@@ -77,9 +77,9 @@ class Post extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , 'user_id');
     }
 
     /**
@@ -104,5 +104,16 @@ class Post extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    /**
+     * Определяет, должен ли автор поста быть уведомлён о новом комментарии.
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function shouldNotifyAboutCommentFrom(int $userId): bool
+    {
+        return $this->user_id !== $userId;
     }
 }

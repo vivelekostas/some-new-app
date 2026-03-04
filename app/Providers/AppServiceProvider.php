@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('admin') ? true : null;
         });
 
+        // Политики.
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Tag::class, TagPolicy::class);

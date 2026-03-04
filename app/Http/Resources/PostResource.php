@@ -25,7 +25,7 @@ class PostResource extends JsonResource
             'short_description' => $this->short_description,
             'body' => $this->body,
             'is_published' => $this->is_published,
-            'user_name' => $this->whenLoaded('user', fn() => $this->user->name),
+            'author_name' => $this->whenLoaded('author', fn() => $this->author->name),
             'category_title' => $this->whenLoaded('category', fn() => $this->category?->title),
             'comments' => new CommentCollection($this->whenLoaded('comments')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),

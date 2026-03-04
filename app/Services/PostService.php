@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Events\PostPublishedEvent;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -69,6 +70,9 @@ class PostService
     }
 
     /**
+     * Создаёт новый пост. Если есть теги, то аттачит их к посту.
+     * Если пост сразу публикуется, то выбрасываем соответсвующее событие.
+     *
      * @param User $user
      * @param array $data
      * @return Post
@@ -81,20 +85,33 @@ class PostService
             $post->tags()->sync($data['tags']);
         }
 
+        if ($post->is_published) {
+            PostPublishedEvent::dispatch($post);
+        }
+
         return $post;
     }
 
     /**
+     * Обновляет пост. Если есть теги, то аттачит их к посту.
+     * Если пост публикуется из черновика, то выбрасываем соответсвующее событие.
+     *
      * @param Post $post
      * @param array $data
      * @return Post
      */
     public function update(Post $post, array $data): Post
     {
+        $wasPublished = $post->is_published;
+
         $post->update($data);
 
         if (isset($data['tags'])) {
             $post->tags()->sync($data['tags']);
+        }
+
+        if (!$wasPublished && $post->is_published) {
+            PostPublishedEvent::dispatch($post);
         }
 
         return $post->refresh();

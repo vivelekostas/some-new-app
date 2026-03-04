@@ -6,6 +6,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -56,6 +57,10 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $subscribers
+ * @property-read int|null $subscribers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $subscriptions
+ * @property-read int|null $subscriptions_count
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -137,5 +142,48 @@ class User extends Authenticatable
     public function likedComments(): MorphToMany
     {
         return $this->morphedByMany(Comment::class, 'likeable', 'likes');
+    }
+
+    /**
+     * Пользователи, на которых подписан текущий пользователь.
+     *
+     * @return BelongsToMany
+     */
+    public function subscriptions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'subscriptions',
+            'subscriber_id',
+            'author_id'
+        );
+    }
+
+    /**
+     * Подписчики текущего автора.
+     *
+     * @return BelongsToMany
+     */
+    public function subscribers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'subscriptions',
+            'author_id',
+            'subscriber_id'
+        );
+    }
+
+    /**
+     * Проверяет, подписан ли пользователь на автора.
+     *
+     * @param User $author
+     * @return bool
+     */
+    public function isSubscribedTo(User $author): bool
+    {
+        return $this->subscriptions()
+            ->where('author_id', $author->id)
+            ->exists();
     }
 }

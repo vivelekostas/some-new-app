@@ -13,6 +13,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Services\CommentService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Response;
 
 class CommentController extends Controller
 {
@@ -87,6 +88,10 @@ class CommentController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Post $post
+     * @param Comment $comment
+     * @return Response
      */
     public function destroy(Post $post, Comment $comment)
     {

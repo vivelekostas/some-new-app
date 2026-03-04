@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Model|\Eloquent $likeable
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User $author
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Like newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Like newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Like query()
@@ -35,9 +35,9 @@ class Like extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
